@@ -1,0 +1,22 @@
+#/bin/bash
+
+#cat list | grep -v -P "^#" | while read file; do wget "$file"; done
+
+# надо удалять первую строку
+# Пример генерируемого документа
+#EXTINF:312,Motley Crue - Power To The Music
+#http://cs4756.vk.me/u8865882/audios/a1b7638e8f88.mp3
+
+FILENAME="list"
+LN=false
+track=""
+while read line
+do
+	if [ $LN = "true" ]; then 
+		wget --output-document="$track.mp3" "$line";
+		LN=false
+	else
+		track=${line:12}
+		LN=true
+	fi
+done < $FILENAME
